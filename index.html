@@ -1,32 +1,60 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <title>پیام‌رسان مدرسه</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>آپلود ویدئو</title>
+  <style>
+    body { font-family: sans-serif; direction: rtl; padding: 20px; }
+    .container { max-width: 400px; margin: auto; }
+    input, button { width: 100%; padding: 10px; margin-top: 10px; }
+    #linkBox { margin-top: 15px; word-break: break-all; }
+  </style>
 </head>
 <body>
-  <div id="loginDiv">
-    <h1>پیام‌رسان مدرسه</h1>
-    <select id="roleSelect">
-      <option value="student">دانش‌آموز</option>
-      <option value="teacher">معلم</option>
-    </select>
-    <input type="password" id="teacherCode" placeholder="کد معلم" style="display:none;">
-    <button onclick="login()">ورود</button>
+  <div class="container">
+    <h2>آپلود ویدئو و دریافت لینک</h2>
+    <input type="file" id="videoInput" accept="video/*" />
+    <button onclick="uploadVideo()">آپلود</button>
+
+    <div id="status"></div>
+    <div id="linkBox"></div>
   </div>
 
-  <div id="dashboard" style="display:none;">
-    <h2 id="welcome"></h2>
-    <div id="uploadDiv" style="display:none;">
-      <textarea id="textInput" placeholder="متن پیام"></textarea><br>
-      <input type="file" id="fileInput"><br>
-      <button onclick="addMessage()">ارسال</button>
-    </div>
-    <h3>پیام‌ها:</h3>
-    <div id="messages"></div>
-  </div>
+  <script>
+    async function uploadVideo() {
+      const file = document.getElementById('videoInput').files[0];
+      const status = document.getElementById('status');
+      const linkBox = document.getElementById('linkBox');
+      linkBox.textContent = '';
 
-  <script src="script.js"></script>
+      if (!file) {
+        status.textContent = 'لطفا یک ویدئو انتخاب کنید.';
+        return;
+      }
+
+      status.textContent = 'در حال آپلود...';
+
+      const formData = new FormData();
+      formData.append('video', file);
+
+      try {
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.url) {
+          status.textContent = 'آپلود موفق بود!';
+          linkBox.textContent = 'لینک ویدئو: ' + result.url;
+        } else {
+          status.textContent = 'آپلود انجام نشد.';
+        }
+      } catch (err) {
+        status.textContent = 'خطا در آپلود.';
+      }
+    }
+  </script>
 </body>
 </html>
