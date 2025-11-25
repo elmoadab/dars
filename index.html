@@ -1,60 +1,80 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>آپلود ویدئو</title>
-  <style>
-    body { font-family: sans-serif; direction: rtl; padding: 20px; }
-    .container { max-width: 400px; margin: auto; }
-    input, button { width: 100%; padding: 10px; margin-top: 10px; }
-    #linkBox { margin-top: 15px; word-break: break-all; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> elm o adab </title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #121212;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        text-align: center;
+        padding: 2rem 1rem;
+        font-size: 2.5rem;
+        color: #00ffcc;
+    }
+    .video-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: auto;
+    }
+    .video-card {
+        background: #1e1e1e;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .video-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+    }
+    video {
+        width: 100%;
+        display: block;
+        border-bottom: 1px solid #333;
+    }
+    .title {
+        padding: 1rem;
+        font-size: 1.2rem;
+        text-align: center;
+        background: #222;
+        color: #00ffcc;
+    }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h2>آپلود ویدئو و دریافت لینک</h2>
-    <input type="file" id="videoInput" accept="video/*" />
-    <button onclick="uploadVideo()">آپلود</button>
 
-    <div id="status"></div>
-    <div id="linkBox"></div>
-  </div>
+<h1>فیلم های ریاضی</h1>
 
-  <script>
-    async function uploadVideo() {
-      const file = document.getElementById('videoInput').files[0];
-      const status = document.getElementById('status');
-      const linkBox = document.getElementById('linkBox');
-      linkBox.textContent = '';
+<div class="video-gallery">
 
-      if (!file) {
-        status.textContent = 'لطفا یک ویدئو انتخاب کنید.';
-        return;
-      }
+    <div class="video-card">
+        <video controls>
+            <source src="https://limewire.com/decrypt?downloadUrl=https%3A%2F%2Fb61cdfd8cf17f52ddc020162e738eb5d.r2.cloudflarestorage.com%2Flimewire-filesharing-production%2Fbuckets%2Fc9414f77-789c-4a53-b324-247981f75d22%2F28a6811c-3605-4058-9000-3c709de2528a%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Date%3D20251125T202754Z%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Credential%3Da1868571dfad6d4fe293ee5b945a0ad5%252F20251125%252Fauto%252Fs3%252Faws4_request%26X-Amz-Expires%3D14400%26X-Amz-Signature%3D02b898ebda04abe96304598f27d615ccc8c3aae6b35994a329064fad489b00dd&mediaType=video%2Fmp4&decryptionKeys=eyJhZXNHY21Kd2siOnsiYWVzS2V5VHlwZSI6IlNZTU1FVFJJQ19BRVMtR0NNX0tFWSIsImp3ayI6eyJhbGciOiJBMjU2R0NNIiwiZXh0Ijp0cnVlLCJrIjoiMkFkWTdyVkdQRVkxQnlHOEZYRF9KTjA1REpJSnpnUkcxbEdoQkJ4dXN3ZyIsImtleV9vcHMiOlsiZW5jcnlwdCIsImRlY3J5cHQiXSwia3R5Ijoib2N0In19LCJhZXNDdHJKd2siOnsiYWVzS2V5VHlwZSI6IlNZTU1FVFJJQ19BRVMtQ1RSX0tFWSIsImp3ayI6eyJhbGciOiJBMjU2Q1RSIiwiZXh0Ijp0cnVlLCJrIjoiMkFkWTdyVkdQRVkxQnlHOEZYRF9KTjA1REpJSnpnUkcxbEdoQkJ4dXN3ZyIsImtleV9vcHMiOlsiZW5jcnlwdCIsImRlY3J5cHQiXSwia3R5Ijoib2N0In19fQ" type="video/mp4">
+            مرورگر شما از ویدئو پشتیبانی نمی‌کند.
+        </video>
+        <div class="title">ویدئو اول</div>
+    </div>
 
-      status.textContent = 'در حال آپلود...';
+    <div class="video-card">
+        <video controls>
+            <source src="https://limewire.com/decrypt?downloadUrl=https%3A%2F%2Fb61cdfd8cf17f52ddc020162e738eb5d.r2.cloudflarestorage.com%2Flimewire-filesharing-production%2Fbuckets%2Fc9414f77-789c-4a53-b324-247981f75d22%2F28a6811c-3605-4058-9000-3c709de2528a%3FX-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Date%3D20251125T202754Z%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Credential%3Da1868571dfad6d4fe293ee5b945a0ad5%252F20251125%252Fauto%252Fs3%252Faws4_request%26X-Amz-Expires%3D14400%26X-Amz-Signature%3D02b898ebda04abe96304598f27d615ccc8c3aae6b35994a329064fad489b00dd&mediaType=video%2Fmp4&decryptionKeys=eyJhZXNHY21Kd2siOnsiYWVzS2V5VHlwZSI6IlNZTU1FVFJJQ19BRVMtR0NNX0tFWSIsImp3ayI6eyJhbGciOiJBMjU2R0NNIiwiZXh0Ijp0cnVlLCJrIjoiMkFkWTdyVkdQRVkxQnlHOEZYRF9KTjA1REpJSnpnUkcxbEdoQkJ4dXN3ZyIsImtleV9vcHMiOlsiZW5jcnlwdCIsImRlY3J5cHQiXSwia3R5Ijoib2N0In19LCJhZXNDdHJKd2siOnsiYWVzS2V5VHlwZSI6IlNZTU1FVFJJQ19BRVMtQ1RSX0tFWSIsImp3ayI6eyJhbGciOiJBMjU2Q1RSIiwiZXh0Ijp0cnVlLCJrIjoiMkFkWTdyVkdQRVkxQnlHOEZYRF9KTjA1REpJSnpnUkcxbEdoQkJ4dXN3ZyIsImtleV9vcHMiOlsiZW5jcnlwdCIsImRlY3J5cHQiXSwia3R5Ijoib2N0In19fQ" type="video/mp4">
+            مرورگر شما از ویدئو پشتیبانی نمی‌کند.
+        </video>
+        <div class="title">ویدئو دوم</div>
+    </div>
 
-      const formData = new FormData();
-      formData.append('video', file);
+    <!-- برای ویدئوهای بیشتر همین بلوک را کپی کنید -->
+</div>
 
-      try {
-        const response = await fetch('/upload', {
-          method: 'POST',
-          body: formData
-        });
-
-        const result = await response.json();
-        if (result.url) {
-          status.textContent = 'آپلود موفق بود!';
-          linkBox.textContent = 'لینک ویدئو: ' + result.url;
-        } else {
-          status.textContent = 'آپلود انجام نشد.';
-        }
-      } catch (err) {
-        status.textContent = 'خطا در آپلود.';
-      }
-    }
-  </script>
 </body>
 </html>
