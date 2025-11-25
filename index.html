@@ -1,175 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>سامانه ویدئویی — نسخه مدرن</title>
-  <style>
-    @font-face{font-family:'IRANSans';src:url('https://cdn.jsdelivr.net/gh/rastikerdar/iransans/webfonts/IRANSansWeb.woff2') format('woff2')}
-    body{font-family:IRANSans,system-ui;direction:rtl;background:linear-gradient(135deg,#763ecf,#b388ff);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff}
-    .glass{background:rgba(255,255,255,0.13);backdrop-filter:blur(15px);border-radius:20px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,0.25);width:100%;max-width:480px}
-    h1{text-align:center;font-size:28px;margin-bottom:26px;color:#fff}
-    .role-btn{width:100%;padding:18px;font-size:20px;border:none;border-radius:14px;margin:10px 0;background:#ffffff1c;color:#fff;cursor:pointer;transition:.25s}
-    .role-btn:hover{background:#ffffff33;transform:translateY(-3px)}
-    input,button{width:100%;padding:14px;border-radius:12px;border:none;font-size:17px;margin-top:10px}
-    input{background:#ffffffdd;color:#2d0a41}
-    button{background:#6d28d9;color:white;cursor:pointer;transition:.25s}
-    button:hover{background:#5b21b6}
-    .hidden{display:none}
-    .video-item{background:#ffffff22;padding:16px;border-radius:14px;margin-top:14px}
-    video{width:100%;border-radius:12px;margin-top:10px}
-  </style>
+  <meta charset="UTF-8">
+  <title>پیام‌رسان مدرسه</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="glass">
-  <h1>سامانه اشتراک ویدئو</h1>
-
-  <!-- نقش‌ها -->
-  <div id="roleBox">
-    <button class="role-btn" id="teacherBtn">معلم</button>
-    <button class="role-btn" id="studentBtn">دانش‌آموز</button>
+  <div id="loginDiv">
+    <h1>پیام‌رسان مدرسه</h1>
+    <select id="roleSelect">
+      <option value="student">دانش‌آموز</option>
+      <option value="teacher">معلم</option>
+    </select>
+    <input type="password" id="teacherCode" placeholder="کد معلم" style="display:none;">
+    <button onclick="login()">ورود</button>
   </div>
 
-  <!-- ورود معلم (با input type=password تا دیده نشود) -->
-  <div id="teacherLogin" class="hidden">
-    <input id="teacherCode" type="password" maxlength="4" placeholder="کد ورود" autocomplete="off">
-    <button id="teacherAuthBtn">ورود</button>
-    <p id="teacherAuthMsg"></p>
+  <div id="dashboard" style="display:none;">
+    <h2 id="welcome"></h2>
+    <div id="uploadDiv" style="display:none;">
+      <textarea id="textInput" placeholder="متن پیام"></textarea><br>
+      <input type="file" id="fileInput"><br>
+      <button onclick="addMessage()">ارسال</button>
+    </div>
+    <h3>پیام‌ها:</h3>
+    <div id="messages"></div>
   </div>
 
-  <!-- پنل معلم -->
-  <div id="teacherPanel" class="hidden">
-    <h2 style="text-align:center">پنل معلم</h2>
-    <input type="file" id="videoFile" accept="video/*">
-    <input id="videoName" placeholder="نام ویدئو">
-    <input id="videoPart" placeholder="پارت" inputmode="numeric">
-    <button id="uploadBtn">بارگذاری</button>
-    <button id="backTeacher" style="background:#b91c1c">بازگشت</button>
-    <div id="teacherList"></div>
-  </div>
-
-  <!-- پنل دانش‌آموز -->
-  <div id="studentPanel" class="hidden">
-    <h2 style="text-align:center">ویدئوها</h2>
-    <div id="studentList"></div>
-    <button id="backStudent" style="background:#b91c1c;margin-top:20px">بازگشت</button>
-  </div>
-</div>
-
-<script>
-let db;
-const DB_NAME='videoDB2', STORE='videos', CODE='9854';
-
-// DB
-function openDB(){
-  return new Promise(res=>{
-    const rq=indexedDB.open(DB_NAME,1);
-    rq.onupgradeneeded=e=>{
-      const d=e.target.result;
-      const st=d.createObjectStore(STORE,{keyPath:'id',autoIncrement:true});
-      st.createIndex('part','part');
-    };
-    rq.onsuccess=()=>{db=rq.result;res()};
-  });
-}
-
-function addVid(n,p,f){
-  return new Promise(async res=>{
-    const buf=await f.arrayBuffer();
-    const tx=db.transaction(STORE,'readwrite');
-    tx.objectStore(STORE).add({name:n,part:Number(p),blob:new Blob([buf],{type:f.type})}).onsuccess=()=>res();
-  });
-}
-
-function getAll(){
-  return new Promise(res=>{
-    const tx=db.transaction(STORE,'readonly');
-    tx.objectStore(STORE).getAll().onsuccess=e=>res(e.target.result);
-  });
-}
-
-function del(id){
-  return new Promise(res=>{
-    const tx=db.transaction(STORE,'readwrite');
-    tx.objectStore(STORE).delete(id).onsuccess=()=>res();
-  });
-}
-
-// UI
-const roleBox=document.getElementById('roleBox');
-const teacherBtn=document.getElementById('teacherBtn');
-const studentBtn=document.getElementById('studentBtn');
-const teacherLogin=document.getElementById('teacherLogin');
-const teacherPanel=document.getElementById('teacherPanel');
-const studentPanel=document.getElementById('studentPanel');
-
-teacherBtn.onclick=()=>{
-  roleBox.classList.add('hidden');
-  teacherLogin.classList.remove('hidden');
-};
-
-studentBtn.onclick=()=>{
-  roleBox.classList.add('hidden');
-  studentPanel.classList.remove('hidden');
-  loadStudent();
-};
-
-document.getElementById('teacherAuthBtn').onclick=()=>{
-  if(document.getElementById('teacherCode').value===CODE){
-    teacherLogin.classList.add('hidden');
-    teacherPanel.classList.remove('hidden');
-    loadTeacher();
-  } else {
-    document.getElementById('teacherAuthMsg').textContent='کد اشتباه است';
-  }
-};
-
-// Teacher
-const uploadBtn=document.getElementById('uploadBtn');
-uploadBtn.onclick=async()=>{
-  const f=document.getElementById('videoFile').files[0];
-  const n=document.getElementById('videoName').value;
-  const p=document.getElementById('videoPart').value;
-  if(!f||!n||!p) return alert('فیلدها کامل نیست');
-  await addVid(n,p,f);
-  loadTeacher();
-};
-
-document.getElementById('backTeacher').onclick=()=>{
-  teacherPanel.classList.add('hidden');
-  roleBox.classList.remove('hidden');
-};
-
-async function loadTeacher(){
-  const list=document.getElementById('teacherList');
-  list.innerHTML='';
-  const vids=await getAll();
-  vids.sort((a,b)=>a.part-b.part);
-  vids.forEach(v=>{
-    const u=URL.createObjectURL(v.blob);
-    list.innerHTML+=`<div class='video-item'>پارت ${v.part} — ${v.name}<br><video src='${u}' controls></video><br><button onclick="deleteVid(${v.id})">حذف</button></div>`;
-  });
-}
-async function deleteVid(id){ await del(id); loadTeacher(); }
-
-// Student
-async function loadStudent(){
-  const list=document.getElementById('studentList');
-  list.innerHTML='';
-  const vids=await getAll();
-  vids.sort((a,b)=>a.part-b.part);
-  vids.forEach(v=>{
-    const u=URL.createObjectURL(v.blob);
-    list.innerHTML+=`<div class='video-item'>پارت ${v.part} — ${v.name}<br><video src='${u}' controls></video></div>`;
-  });
-}
-
-document.getElementById('backStudent').onclick=()=>{
-  studentPanel.classList.add('hidden');
-  roleBox.classList.remove('hidden');
-};
-
-openDB();
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
