@@ -1,23 +1,112 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ریاضی استاد زارعی</title>
+<title>آموزش استاد زارعی</title>
 <style>
+    * {
+        box-sizing: border-box;
+    }
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #121212;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         color: #fff;
         margin: 0;
         padding: 0;
+        min-height: 100vh;
     }
+    
+    .main-page {
+        display: block;
+    }
+    .main-page.hidden {
+        display: none;
+    }
+    
     h1 {
         text-align: center;
         padding: 2rem 1rem;
         font-size: 2.5rem;
         color: #00ffcc;
+        text-shadow: 0 0 20px rgba(0,255,204,0.5);
     }
+    
+    .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+    
+    .subjects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        max-width: 1000px;
+        margin: auto;
+    }
+    
+    .subject-btn {
+        background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+        border: 2px solid #333;
+        border-radius: 15px;
+        padding: 2rem 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .subject-btn:hover {
+        transform: translateY(-5px);
+        border-color: #00ffcc;
+        box-shadow: 0 10px 30px rgba(0,255,204,0.3);
+    }
+    
+    .subject-btn .icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .subject-btn .name {
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    
+    .video-page {
+        display: none;
+    }
+    .video-page.active {
+        display: block;
+    }
+    
+    .back-btn {
+        background: #00ffcc;
+        color: #000;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin: 1rem 2rem;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+    
+    .back-btn:hover {
+        background: #00ccaa;
+        transform: scale(1.05);
+    }
+    
+    .page-title {
+        text-align: center;
+        color: #00ffcc;
+        font-size: 2rem;
+        margin: 1rem 0;
+    }
+    
     .video-gallery {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -26,6 +115,7 @@
         max-width: 1200px;
         margin: auto;
     }
+    
     .video-card {
         background: #1e1e1e;
         border-radius: 12px;
@@ -33,47 +123,204 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         transition: transform 0.3s, box-shadow 0.3s;
     }
+    
     .video-card:hover {
-        transform: scale(1.05);
+        transform: scale(1.03);
         box-shadow: 0 12px 30px rgba(0,0,0,0.7);
     }
+    
     video {
         width: 100%;
         display: block;
         border-bottom: 1px solid #333;
     }
+    
     .title {
         padding: 1rem;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         text-align: center;
         background: #222;
         color: #00ffcc;
+    }
+    
+    .no-video {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        font-size: 1.2rem;
+    }
+    
+    .footer {
+        text-align: center;
+        padding: 2rem;
+        color: #555;
+        margin-top: 2rem;
     }
 </style>
 </head>
 <body>
 
-<h1>فیلم های ریاضی</h1>
-
-<div class="video-gallery">
-
-    <div class="video-card">
-        <video controls>
-            <source src="videos/part1.mp4" type="video/mp4">
-            مرورگر شما از ویدئو پشتیبانی نمی‌کند.
-        </video>
-        <div class="title">پارت اول ، کسر ها</div>
+<!-- صفحه اصلی -->
+<div class="main-page" id="mainPage">
+    <h1>📚 آموزش استاد زارعی</h1>
+    <p class="subtitle">درس مورد نظر خود را انتخاب کنید</p>
+    
+    <div class="subjects-grid">
+        <div class="subject-btn" onclick="showSubject('riazi', 'ریاضی')">
+            <div class="icon">📐</div>
+            <div class="name">ریاضی</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('olom', 'علوم')">
+            <div class="icon">🔬</div>
+            <div class="name">علوم</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('ejtemai', 'اجتماعی')">
+            <div class="icon">🌍</div>
+            <div class="name">اجتماعی</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('honar', 'هنر')">
+            <div class="icon">🎨</div>
+            <div class="name">هنر</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('farsi', 'فارسی')">
+            <div class="icon">📖</div>
+            <div class="name">فارسی</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('negaresh', 'نگارش')">
+            <div class="icon">✍️</div>
+            <div class="name">نگارش</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('araby', 'عربی')">
+            <div class="icon">🕌</div>
+            <div class="name">عربی</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('tafakor', 'تفکر')">
+            <div class="icon">🧠</div>
+            <div class="name">تفکر</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('zaban', 'زبان')">
+            <div class="icon">🔤</div>
+            <div class="name">زبان</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('fanavari', 'فناوری')">
+            <div class="icon">💻</div>
+            <div class="name">فناوری</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('dini', 'دینی')">
+            <div class="icon">🤲</div>
+            <div class="name">دینی</div>
+        </div>
+        
+        <div class="subject-btn" onclick="showSubject('quran', 'قرآن')">
+            <div class="icon">📗</div>
+            <div class="name">قرآن</div>
+        </div>
     </div>
-
-    <div class="video-card">
-        <video controls>
-            <source src="videos/part2.mp4" type="video/mp4">
-            مرورگر شما از ویدئو پشتیبانی نمی‌کند.
-        </video>
-        <div class="title">پارت دوم ، جمع و تفریق</div>
+    
+    <div class="footer">
+        ساخته شده توسط عطا دهقان نصیری
     </div>
-
 </div>
+
+<!-- صفحه ویدیوها -->
+<div class="video-page" id="videoPage">
+    <button class="back-btn" onclick="goBack()">→ بازگشت</button>
+    <h2 class="page-title" id="pageTitle"></h2>
+    
+    <div class="video-gallery" id="videoGallery"></div>
+</div>
+
+<script>
+    // ✅ داده‌های ویدیوها - فقط اینجا رو ویرایش کن
+    const videosData = {
+        riazi: [
+            { file: "part1.mp4", title: "پارت اول - کسرها" },
+            { file: "part2.mp4", title: "پارت دوم - جمع و تفریق" },
+           // { file: "part3.mp4", title: "پارت سوم - ضرب و تقسیم" }
+        ],
+        olom: [
+           // { file: "part1.mp4", title: "پارت اول - سلول" },
+           // { file: "part2.mp4", title: "پارت دوم - انرژی" }
+        ],
+        ejtemai: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        honar: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        farsi: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        negaresh: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        araby: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        tafakor: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        zaban: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        fanavari: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        dini: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ],
+        quran: [
+            // { file: "part1.mp4", title: "پارت اول" }
+        ]
+    };
+    
+    function showSubject(folder, subjectName) {
+        document.getElementById('mainPage').classList.add('hidden');
+        document.getElementById('videoPage').classList.add('active');
+        document.getElementById('pageTitle').textContent = '🎬 فیلم‌های ' + subjectName;
+        loadVideos(folder);
+    }
+    
+    function loadVideos(folder) {
+        const gallery = document.getElementById('videoGallery');
+        const videos = videosData[folder] || [];
+        
+        if (videos.length === 0) {
+            gallery.innerHTML = '<div class="no-video">🎬 هنوز ویدیویی آپلود نشده</div>';
+            return;
+        }
+        
+        let html = '';
+        videos.forEach(video => {
+            html += `
+                <div class="video-card">
+                    <video controls>
+                        <source src="videos/${folder}/${video.file}" type="video/mp4">
+                        مرورگر شما از ویدئو پشتیبانی نمی‌کند.
+                    </video>
+                    <div class="title">${video.title}</div>
+                </div>
+            `;
+        });
+        
+        gallery.innerHTML = html;
+    }
+    
+    function goBack() {
+        document.getElementById('mainPage').classList.remove('hidden');
+        document.getElementById('videoPage').classList.remove('active');
+    }
+</script>
 
 </body>
 </html>
