@@ -1,258 +1,132 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>صفحهٔ دانش‌آموز — ارسال تکالیف</title>
-  <style>
-    :root{
-      --bg:#0f0520;--card:#1a0b2b;--accent1:#7b2cbf;--accent2:#b388ff;
-      --text:#f5f5ff;--muted:#cfc8e9;--glass: rgba(255,255,255,0.04);
+<meta charset="UTF-8">
+<title>سایت دانش‌آموز | تکالیف</title>
+
+<style>
+    body {
+        background: #200533;
+        color: white;
+        font-family: sans-serif;
+        text-align: center;
     }
-    *{box-sizing:border-box;font-family: "IRANSans", "Vazir", system-ui, -apple-system, "Segoe UI", Roboto, Arial;}
-    html,body{height:100%;margin:0;background: linear-gradient(180deg,#0b0317,#140724); color:var(--text);}
-    .container{max-width:1000px;margin:28px auto;padding:18px;}
-    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
-    .brand{display:flex;gap:12px;align-items:center;}
-    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:white;}
-    .h1{font-size:18px;font-weight:700;}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015)); padding:16px;border-radius:12px;box-shadow: 0 6px 30px rgba(11,3,23,0.6);border:1px solid rgba(255,255,255,0.03); margin-bottom:14px;}
-    .row{display:flex;gap:8px;align-items:center;}
-    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:10px 14px;border-radius:10px;border:none;color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(123,44,191,0.18);}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);}
-    input[type="text"], select,textarea{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:8px;color:var(--text);outline:none;}
-    .muted{color:var(--muted);font-size:13px;}
-    .assignments{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    .assignment-card{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02);}
-    .small{font-size:13px;padding:8px 10px;border-radius:8px;}
-    @media (max-width:760px){.assignments{grid-template-columns:1fr;} .header{flex-direction:column;gap:10px;align-items:flex-start}}
-  </style>
+    .container {
+        width: 90%;
+        max-width: 600px;
+        margin: auto;
+        background: #3b0f57;
+        padding: 25px;
+        margin-top: 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px #6b00c4;
+    }
+    button {
+        width: 40%;
+        padding: 15px;
+        margin: 10px;
+        border-radius: 15px;
+        border: none;
+        background: #a700ff;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .taskBox, .uploadBox {
+        margin-top: 20px;
+        text-align: right;
+        display: none;
+    }
+    input, textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        margin-top: 10px;
+    }
+    .task {
+        background: #5a138d;
+        padding: 12px;
+        border-radius: 12px;
+        margin-top: 10px;
+    }
+</style>
+
 </head>
+
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="brand">
-        <div class="logo">ری</div>
-        <div>
-          <div class="h1">صفحهٔ دانش‌آموز — کلاس ریاضی</div>
-          <div class="muted">نام و نام خانوادگی را وارد کنید و سپس تکالیف را مشاهده یا ارسال کنید.</div>
-        </div>
-      </div>
-      <div class="row">
-        <input id="studentName" type="text" placeholder="نام + نام خانوادگی" style="min-width:220px" />
-        <button id="saveName" class="btn small">ذخیره نام</button>
-      </div>
+
+<div class="container">
+
+    <h1>سایت دانش‌آموز</h1>
+
+    <button onclick="showTasks()">تکالیف</button>
+    <button onclick="showUpload()">ارسال تکلیف</button>
+
+    <!-- بخش نمایش لیست تکالیف -->
+    <div id="tasks" class="taskBox"></div>
+
+    <!-- بخش ارسال تکلیف -->
+    <div id="upload" class="uploadBox">
+        <h3>ارسال تکلیف</h3>
+        <input type="file" id="fileInput" multiple>
+        <textarea id="textInput" placeholder="اگر پاسخ متنی بود..."></textarea>
+        <button onclick="uploadHomework()">ارسال</button>
+        <p id="uploadStatus"></p>
     </div>
 
-    <div class="card">
-      <div style="display:flex;gap:8px;">
-        <button id="btnList" class="btn small">تکالیف</button>
-        <button id="btnSend" class="btn ghost small">ارسال</button>
-      </div>
-    </div>
+</div>
 
-    <div id="panelList" class="card" style="display:block;">
-      <h3>تکالیف جاری</h3>
-      <div id="assignments" class="assignments"><div class="muted">در حال بارگذاری…</div></div>
-    </div>
+<script>
+    const CLOUD_NAME = "dp72ievec";
+    const UPLOAD_PRESET = "my_videos";
 
-    <div id="panelSend" class="card" style="display:none;">
-      <h3>ارسال تکلیف</h3>
-      <div class="form-row">
-        <label class="muted">انتخاب تکلیف</label>
-        <select id="selectAssignment"></select>
-      </div>
-      <div id="sendFormArea"></div>
-      <div style="margin-top:12px;">
-        <button id="submitBtn" class="btn">ارسال تکلیف</button>
-      </div>
-      <div id="uploadStatus" class="muted" style="margin-top:10px"></div>
-    </div>
-  </div>
+    function showTasks() {
+        document.getElementById("tasks").style.display = "block";
+        document.getElementById("upload").style.display = "none";
 
-  <!-- Firebase (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore-compat.js"></script>
+        const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+        const box = document.getElementById("tasks");
+        box.innerHTML = "<h3>لیست تکالیف</h3>";
 
-  <script>
-    /***** Cloudinary که شما دادید *****/
-    const CLOUD_NAME = 'dp72ievec';
-    const UPLOAD_PRESET = 'my_videos';
-
-    /***** تنظیمات Firebase — این را با مقادیر پروژهٔ خود جایگزین کنید *****/
-    const FIREBASE_CONFIG = {
-      apiKey: "REPLACE_WITH_YOUR_API_KEY",
-      authDomain: "REPLACE_WITH_AUTH_DOMAIN",
-      projectId: "REPLACE_WITH_PROJECT_ID",
-      storageBucket: "REPLACE_WITH_STORAGE_BUCKET",
-      messagingSenderId: "REPLACE_WITH_SENDER_ID",
-      appId: "REPLACE_WITH_APP_ID"
-    };
-
-    // init firebase
-    firebase.initializeApp(FIREBASE_CONFIG);
-    const db = firebase.firestore();
-
-    // المان‌ها
-    const studentNameEl = document.getElementById('studentName');
-    const saveNameBtn = document.getElementById('saveName');
-    const btnList = document.getElementById('btnList');
-    const btnSend = document.getElementById('btnSend');
-    const panelList = document.getElementById('panelList');
-    const panelSend = document.getElementById('panelSend');
-    const assignmentsGrid = document.getElementById('assignments');
-    const selectAssignment = document.getElementById('selectAssignment');
-    const sendFormArea = document.getElementById('sendFormArea');
-    const submitBtn = document.getElementById('submitBtn');
-    const uploadStatus = document.getElementById('uploadStatus');
-
-    // ذخیره نام در localStorage
-    function loadName(){
-      const n = localStorage.getItem('studentName') || '';
-      studentNameEl.value = n;
-    }
-    loadName();
-    saveNameBtn.addEventListener('click', ()=> {
-      const v = studentNameEl.value.trim();
-      if(!v){ alert('نام و نام خانوادگی را وارد کنید.'); return; }
-      localStorage.setItem('studentName', v);
-      alert('نام ذخیره شد.');
-    });
-
-    // تغییر بین پنل‌ها
-    btnList.addEventListener('click', ()=>{ panelList.style.display='block'; panelSend.style.display='none'; });
-    btnSend.addEventListener('click', ()=>{ panelList.style.display='none'; panelSend.style.display='block'; });
-
-    // بارگذاری تکالیف و پر کردن select
-    let currentAssignments = [];
-    db.collection('assignments').orderBy('createdAt','desc').onSnapshot(snap => {
-      currentAssignments = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderAssignmentsList(currentAssignments);
-      populateSelect(currentAssignments);
-    });
-
-    function renderAssignmentsList(list){
-      assignmentsGrid.innerHTML='';
-      if(list.length===0){ assignmentsGrid.innerHTML='<div class="muted">هنوز تکلیفی ایجاد نشده.</div>'; return; }
-      list.forEach(a=>{
-        const el = document.createElement('div');
-        el.className='assignment-card';
-        const dueText = a.dueDate ? new Date(a.dueDate).toLocaleDateString('fa-IR') : 'بدون انقضا';
-        el.innerHTML = `<div style="font-weight:700">${escapeHtml(a.title)}</div>
-                        <div class="muted">${a.description?escapeHtml(a.description):''}</div>
-                        <div class="muted" style="margin-top:6px">نوع پاسخ: ${escapeHtml(a.responseType)} — تعداد فایل: ${a.numFiles||0}</div>
-                        <div class="muted">مهلت: ${dueText}</div>
-                        <div style="margin-top:8px"><button class="btn small" onclick="openSendPanel('${a.id}')">ارسال برای این تکلیف</button></div>`;
-        assignmentsGrid.appendChild(el);
-      });
+        tasks.forEach(t => {
+            let div = document.createElement("div");
+            div.className = "task";
+            div.innerHTML = `
+                <b>${t.title}</b><br>
+                نوع پاسخ: ${t.answerType}<br>
+                تعداد فایل مجاز: ${t.maxFiles}<br>
+                تاریخ انقضا: ${t.expireDate}
+            `;
+            box.appendChild(div);
+        });
     }
 
-    function populateSelect(list){
-      selectAssignment.innerHTML = '';
-      if(list.length===0){ selectAssignment.innerHTML = '<option>بدون تکلیف</option>'; return; }
-      list.forEach(a=>{
-        const opt = document.createElement('option');
-        opt.value = a.id;
-        opt.textContent = a.title + (a.dueDate ? (' — زمان تا '+ (new Date(a.dueDate).toLocaleDateString('fa-IR'))) : '');
-        selectAssignment.appendChild(opt);
-      });
-      buildSendForm(selectAssignment.value);
+    function showUpload() {
+        document.getElementById("upload").style.display = "block";
+        document.getElementById("tasks").style.display = "none";
     }
 
-    selectAssignment.addEventListener('change', ()=> buildSendForm(selectAssignment.value));
+    async function uploadHomework() {
+        let status = document.getElementById("uploadStatus");
+        status.innerHTML = "در حال آپلود...";
 
-    // وقتی کاربر از لیست دکمه ارسال روی یک تکلیف زد
-    window.openSendPanel = function(assignmentId){
-      panelList.style.display='none'; panelSend.style.display='block';
-      selectAssignment.value = assignmentId;
-      buildSendForm(assignmentId);
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
+        const files = document.getElementById("fileInput").files;
 
-    // ساخت فرم ارسال بسته به پیکربندی تکلیف
-    function buildSendForm(assignmentId){
-      const a = currentAssignments.find(x=>x.id===assignmentId);
-      sendFormArea.innerHTML = '';
-      if(!a){ sendFormArea.innerHTML = '<div class="muted">ابتدا یک تکلیف انتخاب کنید.</div>'; return; }
-      // چک انقضا
-      if(a.dueDate){
-        const due = new Date(a.dueDate);
-        const now = new Date();
-        if(now > due){ sendFormArea.innerHTML = '<div class="muted">مهلت ارسال این تکلیف گذشته است.</div>'; return; }
-      }
-      if(a.responseType === 'text'){
-        sendFormArea.innerHTML = `<div class="muted">لطفاً پاسخ متنی خود را وارد کنید:</div>
-          <textarea id="textAnswer" placeholder="پاسخ خود را اینجا بنویسید..." style="width:100%;min-height:140px;margin-top:8px;padding:10px;border-radius:8px;background:var(--glass);border:1px solid rgba(255,255,255,0.04);color:var(--text)"></textarea>`;
-      } else {
-        const maxFiles = a.numFiles && a.numFiles>0 ? a.numFiles : 1;
-        sendFormArea.innerHTML = `<div class="muted">فایل‌ها را انتخاب کنید (حداکثر ${maxFiles} فایل).</div>
-          <input id="fileInput" type="file" ${a.responseType==='image' ? 'accept="image/*"' : a.responseType==='video' ? 'accept="video/*"' : ''} ${maxFiles>1? 'multiple' : ''} style="margin-top:8px">`;
-      }
-    }
+        for (let file of files) {
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", UPLOAD_PRESET);
 
-    // آپلود به Cloudinary و ثبت در Firestore
-    submitBtn.addEventListener('click', async ()=>{
-      const assignmentId = selectAssignment.value;
-      const a = currentAssignments.find(x=>x.id===assignmentId);
-      if(!a){ alert('یک تکلیف انتخاب کنید.'); return; }
-      const studentName = (studentNameEl.value || '').trim();
-      if(!studentName){ alert('لطفاً نام و نام خانوادگی را وارد و ذخیره کنید.'); return; }
-
-      // چک مهلت
-      if(a.dueDate){
-        const due = new Date(a.dueDate);
-        if(new Date() > due){ alert('مهلت این تکلیف گذشته است.'); return; }
-      }
-
-      uploadStatus.textContent = 'در حال آماده‌سازی ارسال...';
-      try{
-        let filesMeta = [];
-        if(a.responseType === 'text'){
-          const textArea = document.getElementById('textAnswer');
-          const text = textArea ? textArea.value.trim() : '';
-          if(!text){ alert('پاسخ متنی خالی است.'); uploadStatus.textContent=''; return; }
-          filesMeta.push({ name:'پاسخ متنی', url:'', textAnswer: text });
-        } else {
-          const input = document.getElementById('fileInput');
-          if(!input || !input.files || input.files.length===0){ alert('هیچ فایلی انتخاب نشده.'); uploadStatus.textContent=''; return; }
-          const maxFiles = a.numFiles && a.numFiles>0 ? a.numFiles : 1;
-          if(input.files.length > maxFiles){ alert('تعداد فایل‌ها بیش از حد مجاز است.'); uploadStatus.textContent=''; return; }
-
-          // آپلود هر فایل
-          for(let i=0;i<input.files.length;i++){
-            const file = input.files[i];
-            uploadStatus.textContent = `در حال آپلود فایل ${i+1} از ${input.files.length}...`;
-            const form = new FormData();
-            form.append('file', file);
-            form.append('upload_preset', UPLOAD_PRESET);
-            // optional: set folder etc.
-            const resp = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, { method:'POST', body: form });
-            if(!resp.ok){ throw new Error('Upload failed'); }
-            const json = await resp.json();
-            filesMeta.push({ name: file.name, url: json.secure_url, raw: json });
-          }
+            await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
+                method: "POST",
+                body: formData
+            });
         }
 
-        // ذخیره submission در Firestore
-        const submission = {
-          assignmentId,
-          studentName,
-          files: filesMeta,
-          createdAt: new Date().toISOString()
-        };
-        await db.collection('submissions').add(submission);
-        uploadStatus.textContent = 'ارسال با موفقیت انجام شد.';
-        alert('ارسال با موفقیت انجام شد.');
-        // پاکسازی فرم
-        buildSendForm(assignmentId);
-      }catch(err){
-        console.error(err);
-        alert('خطا در ارسال. دوباره تلاش کنید.');
-        uploadStatus.textContent = '';
-      }
-    });
+        status.innerHTML = "با موفقیت ارسال شد!";
+    }
+</script>
 
-    function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];}); }
-  </script>
 </body>
 </html>
