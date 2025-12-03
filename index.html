@@ -2,130 +2,97 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>سایت دانش‌آموز | تکالیف</title>
+<title>سایت دانش‌آموز</title>
 
 <style>
-    body {
-        background: #200533;
-        color: white;
-        font-family: sans-serif;
-        text-align: center;
-    }
+    body { background:#200533; color:white; font-family:sans-serif; text-align:center; }
     .container {
-        width: 90%;
-        max-width: 600px;
-        margin: auto;
-        background: #3b0f57;
-        padding: 25px;
-        margin-top: 40px;
-        border-radius: 20px;
-        box-shadow: 0 0 20px #6b00c4;
+        width:90%; max-width:600px; margin:auto; background:#3b0f57;
+        padding:25px; margin-top:40px; border-radius:20px;
+        box-shadow:0 0 20px #6b00c4;
     }
     button {
-        width: 40%;
-        padding: 15px;
-        margin: 10px;
-        border-radius: 15px;
-        border: none;
-        background: #a700ff;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
+        width:40%; padding:15px; margin:10px; border-radius:15px;
+        border:none; background:#a700ff; color:white; cursor:pointer;
     }
-    .taskBox, .uploadBox {
-        margin-top: 20px;
-        text-align: right;
-        display: none;
-    }
-    input, textarea {
-        width: 100%;
-        padding: 12px;
-        border-radius: 12px;
-        border: none;
-        margin-top: 10px;
-    }
-    .task {
-        background: #5a138d;
-        padding: 12px;
-        border-radius: 12px;
-        margin-top: 10px;
-    }
+    .task { background:#5a138d; padding:12px; border-radius:12px; margin-top:10px; }
 </style>
 
 </head>
-
 <body>
 
 <div class="container">
-
     <h1>سایت دانش‌آموز</h1>
 
-    <button onclick="showTasks()">تکالیف</button>
+    <button onclick="loadTasks()">تکالیف</button>
     <button onclick="showUpload()">ارسال تکلیف</button>
 
-    <!-- بخش نمایش لیست تکالیف -->
-    <div id="tasks" class="taskBox"></div>
+    <div id="taskBox"></div>
 
-    <!-- بخش ارسال تکلیف -->
-    <div id="upload" class="uploadBox">
+    <div id="uploadBox" style="display:none;">
         <h3>ارسال تکلیف</h3>
         <input type="file" id="fileInput" multiple>
-        <textarea id="textInput" placeholder="اگر پاسخ متنی بود..."></textarea>
-        <button onclick="uploadHomework()">ارسال</button>
+        <button onclick="sendHomework()">ارسال</button>
         <p id="uploadStatus"></p>
     </div>
-
 </div>
 
 <script>
-    const CLOUD_NAME = "dp72ievec";
-    const UPLOAD_PRESET = "my_videos";
+const CLOUD_NAME = "dp72ievec";
+const UPLOAD_PRESET = "my_videos";
 
-    function showTasks() {
-        document.getElementById("tasks").style.display = "block";
-        document.getElementById("upload").style.display = "none";
+async function loadTasks() {
+    document.getElementById("uploadBox").style.display = "none";
 
-        const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-        const box = document.getElementById("tasks");
-        box.innerHTML = "<h3>لیست تکالیف</h3>";
+    const box = document.getElementById("taskBox");
+    box.innerHTML = "<h3>درحال دریافت...</h3>";
 
+    try {
+        const res = await fetch(
+            `https://res.cloudinary.com/${CLOUD_NAME}/raw/upload/v1/tasks.json`
+        );
+        const tasks = await res.json();
+
+        box.innerHTML = "<h2>لیست تکالیف</h2>";
         tasks.forEach(t => {
-            let div = document.createElement("div");
-            div.className = "task";
-            div.innerHTML = `
-                <b>${t.title}</b><br>
-                نوع پاسخ: ${t.answerType}<br>
-                تعداد فایل مجاز: ${t.maxFiles}<br>
-                تاریخ انقضا: ${t.expireDate}
+            box.innerHTML += `
+                <div class="task">
+                    <b>${t.title}</b><br>
+                    نوع: ${t.answerType}<br>
+                    تعداد فایل: ${t.maxFiles}<br>
+                    انقضا: ${t.expireDate}
+                </div>
             `;
-            box.appendChild(div);
+        });
+    } catch {
+        box.innerHTML = "<p>تکلیفی یافت نشد!</p>";
+    }
+}
+
+function showUpload() {
+    document.getElementById("taskBox").innerHTML = "";
+    document.getElementById("uploadBox").style.display = "block";
+}
+
+async function sendHomework() {
+    let status = document.getElementById("uploadStatus");
+    status.innerHTML = "درحال آپلود...";
+
+    const files = document.getElementById("fileInput").files;
+
+    for (let file of files) {
+        const fd = new FormData();
+        fd.append("file", file);
+        fd.append("upload_preset", UPLOAD_PRESET);
+
+        await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
+            method: "POST",
+            body: fd
         });
     }
 
-    function showUpload() {
-        document.getElementById("upload").style.display = "block";
-        document.getElementById("tasks").style.display = "none";
-    }
-
-    async function uploadHomework() {
-        let status = document.getElementById("uploadStatus");
-        status.innerHTML = "در حال آپلود...";
-
-        const files = document.getElementById("fileInput").files;
-
-        for (let file of files) {
-            let formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", UPLOAD_PRESET);
-
-            await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
-                method: "POST",
-                body: formData
-            });
-        }
-
-        status.innerHTML = "با موفقیت ارسال شد!";
-    }
+    status.innerHTML = "با موفقیت ارسال شد!";
+}
 </script>
 
 </body>
