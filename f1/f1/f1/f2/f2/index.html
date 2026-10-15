@@ -29,7 +29,7 @@
 
   .card {
     position:relative; z-index:1;
-    width: 100%; max-width: 900px;
+    width: 100%; max-width: 1000px;
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -53,78 +53,54 @@
 
   /* ---------- نوار وضعیت ---------- */
   .status-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 50px;
-    padding: 8px 18px;
-    margin: 0 auto 24px;
-    width: fit-content;
-    font-size: 0.8rem;
-    color: #c7d2fe;
-    transition: all 0.3s;
+    border-radius: 50px; padding: 8px 18px;
+    margin: 0 auto 24px; width: fit-content;
+    font-size: 0.8rem; color: #c7d2fe; transition: all 0.3s;
   }
 
   .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
+    width: 8px; height: 8px; border-radius: 50%;
     background: #facc15;
     animation: pulse 1.5s ease-in-out infinite;
   }
-
   @keyframes pulse {
     0%,100% { opacity:1; transform:scale(1); }
     50% { opacity:0.5; transform:scale(1.3); }
   }
-
   .status-bar.ok .status-dot { background:#10b981; animation:none; }
   .status-bar.err .status-dot { background:#ef4444; animation:none; }
 
   /* ---------- لودینگ ---------- */
-  .loader {
-    display: none;
-    text-align: center;
-    padding: 40px 0;
-  }
+  .loader { display: none; text-align: center; padding: 40px 0; }
   .loader.show { display: block; }
-
   .spinner {
     width: 44px; height: 44px;
     border: 4px solid rgba(167,139,250,0.2);
     border-top-color: #a78bfa;
-    border-radius: 50%;
-    margin: 0 auto 14px;
+    border-radius: 50%; margin: 0 auto 14px;
     animation: spin 0.9s linear infinite;
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .loader-text { color:#c7d2fe; font-size:0.9rem; }
 
-  /* ---------- منطقه بارگذاری (فقط حالت محلی) ---------- */
+  /* ---------- منطقه بارگذاری ---------- */
   .upload-area {
     display: none;
     border: 2px dashed rgba(167,139,250,0.5);
     border-radius: 18px;
-    padding: 40px 20px;
-    text-align: center;
+    padding: 40px 20px; text-align: center;
     background: rgba(167,139,250,0.08);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+    cursor: pointer; transition: all 0.3s ease; margin-bottom: 20px;
   }
-
   .upload-area.show { display: block; animation: fadeIn 0.5s ease; }
-
   .upload-area:hover, .upload-area.dragover {
     border-color: #a78bfa;
     background: rgba(167,139,250,0.18);
     transform: scale(1.01);
   }
-
   .upload-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
   .upload-text { color: #e0e7ff; font-size: 0.95rem; font-weight: 500; margin-bottom: 6px; }
   .upload-hint { color: #94a3b8; font-size: 0.8rem; }
@@ -150,19 +126,18 @@
   thead th {
     background: linear-gradient(135deg, #7c3aed, #db2777);
     color:#fff; font-weight:700;
-    padding: 18px 16px;
-    text-align: center;
+    padding: 18px 16px; text-align: center;
     font-size: clamp(0.85rem, 2.5vw, 1rem);
     letter-spacing: 0.5px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
+    white-space: nowrap;
   }
-
   thead th:first-child { border-top-right-radius: 16px; }
   thead th:last-child  { border-top-left-radius: 16px; }
 
   tbody tr { background: rgba(255,255,255,0.04); transition: all 0.3s ease; }
   tbody tr:nth-child(even) { background: rgba(255,255,255,0.07); }
-  tbody tr:hover { background: rgba(167,139,250,0.25); transform: scale(1.01); }
+  tbody tr:hover { background: rgba(167,139,250,0.25); transform: scale(1.005); }
 
   tbody td {
     padding: 16px;
@@ -173,7 +148,6 @@
     border-bottom: 1px solid rgba(255,255,255,0.06);
     transition: color 0.3s;
   }
-
   tbody tr:hover td { color:#fff; }
   tbody tr:last-child td { border-bottom:none; }
 
@@ -181,19 +155,14 @@
   .table-wrapper::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius:10px; }
   .table-wrapper::-webkit-scrollbar-thumb { background: linear-gradient(90deg,#a78bfa,#f0abfc); border-radius:10px; }
 
+  /* ---------- دکمه‌ها ---------- */
   .reload-btn {
-    display: none;
-    margin: 18px auto 0;
-    background: rgba(255,255,255,0.08);
-    color: #c7d2fe;
+    display: none; margin: 18px auto 0;
+    background: rgba(255,255,255,0.08); color: #c7d2fe;
     border: 1px solid rgba(255,255,255,0.15);
-    padding: 10px 20px;
-    border-radius: 12px;
-    font-family: 'Vazirmatn', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
+    padding: 10px 20px; border-radius: 12px;
+    font-family: 'Vazirmatn', sans-serif; font-size: 0.85rem;
+    font-weight: 500; cursor: pointer; transition: all 0.3s;
   }
   .reload-btn:hover { background: rgba(255,255,255,0.15); color:#fff; }
   .reload-btn.show { display: block; animation: fadeIn 0.4s ease; }
@@ -203,19 +172,16 @@
     color: #fca5a5;
     background: rgba(239,68,68,0.12);
     border: 1px solid rgba(239,68,68,0.3);
-    padding: 12px 16px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    text-align: center;
-    margin-top: 16px;
-    line-height: 1.6;
+    padding: 12px 16px; border-radius: 12px;
+    font-size: 0.85rem; text-align: center;
+    margin-top: 16px; line-height: 1.6;
   }
   .error-msg.show { display: block; }
 
   @media (max-width: 600px) {
     .card { padding: 24px 14px; border-radius: 20px; }
-    thead th { padding: 14px 8px; }
-    tbody td { padding: 12px 8px; }
+    thead th { padding: 14px 10px; font-size: 0.8rem; }
+    tbody td { padding: 12px 10px; font-size: 0.8rem; }
     .upload-area { padding: 30px 14px; }
   }
 </style>
@@ -225,19 +191,16 @@
   <div class="card">
     <h1 id="tableTitle">در حال بارگذاری...</h1>
 
-    <!-- نوار وضعیت -->
     <div class="status-bar" id="statusBar">
       <span class="status-dot"></span>
       <span id="statusText">در حال بررسی...</span>
     </div>
 
-    <!-- لودینگ -->
     <div class="loader" id="loader">
       <div class="spinner"></div>
       <div class="loader-text">در حال خواندن data.json...</div>
     </div>
 
-    <!-- منطقه بارگذاری (فقط حالت محلی) -->
     <div class="upload-area" id="uploadArea">
       <span class="upload-icon">📁</span>
       <div class="upload-text">فایل data.json را اینجا رها کن</div>
@@ -245,7 +208,6 @@
       <input type="file" id="fileInput" accept=".json,application/json">
     </div>
 
-    <!-- جدول -->
     <div class="table-wrapper" id="tableWrapper">
       <table>
         <thead><tr id="tableHead"></tr></thead>
@@ -270,19 +232,15 @@
     const statusText = document.getElementById('statusText');
     const loader = document.getElementById('loader');
 
-    // ============================================================
-    //   تشخیص محیط: سرور (http/https) یا محلی (file://)
-    // ============================================================
+    // تشخیص محیط
     const isServer = location.protocol === 'http:' || location.protocol === 'https:';
 
     window.addEventListener('DOMContentLoaded', () => {
       if (isServer) {
-        // 🌐 حالت سرور → خودکار data.json رو بخون
         setStatus('ok', 'حالت سرور - خواندن خودکار data.json');
         loader.classList.add('show');
         autoLoadFromServer();
       } else {
-        // 💻 حالت محلی → از کاربر فایل بگیر
         setStatus('err', 'حالت محلی - فایل را انتخاب کن');
         tableTitle.textContent = 'جدول من';
         uploadArea.classList.add('show');
@@ -290,9 +248,7 @@
       }
     });
 
-    // ============================================================
-    //   حالت سرور: fetch(data.json)
-    // ============================================================
+    // حالت سرور
     function autoLoadFromServer() {
       fetch('data.json')
         .then(res => {
@@ -302,24 +258,17 @@
         .then(data => {
           loader.classList.remove('show');
           renderTable(data);
-          // نمایش دکمه بارگذاری مجدد فقط در حالت سرور مفید است اگر بخواهد رفرش کنه
         })
         .catch(err => {
           loader.classList.remove('show');
           setStatus('err', 'خطا در خواندن');
-          showError(
-            '❌ ' + err.message +
-            '<br><br>💡 راه حل: می‌تونی فایل رو دستی هم بارگذاری کنی:'
-          );
-          // اگه خطا خورد، به کاربر اجازه بده دستی بارگذاری کنه
+          showError('❌ ' + err.message + '<br><br>💡 می‌تونی فایل رو دستی هم بارگذاری کنی:');
           uploadArea.classList.add('show');
           setupLocalUpload();
         });
     }
 
-    // ============================================================
-    //   حالت محلی: انتخاب و Drag & Drop فایل
-    // ============================================================
+    // حالت محلی
     function setupLocalUpload() {
       uploadArea.addEventListener('click', () => fileInput.click());
 
@@ -353,7 +302,6 @@
       });
     }
 
-    // ---------- خواندن فایل محلی ----------
     function readLocalFile(file) {
       if (!file.name.endsWith('.json')) {
         showError('❌ فقط فایل با پسوند .json قابل قبول است');
@@ -375,12 +323,14 @@
       reader.readAsText(file, 'UTF-8');
     }
 
-    // ============================================================
-    //   رندر جدول
-    // ============================================================
+    // رندر جدول - پشتیبانی از هر تعداد ستون
     function renderTable(data) {
       if (!data.headers || !data.rows) {
         showError('❌ فایل باید شامل "headers" و "rows" باشد');
+        return;
+      }
+      if (!Array.isArray(data.headers) || data.headers.length === 0) {
+        showError('❌ حداقل یک ستون لازم است');
         return;
       }
 
@@ -396,25 +346,21 @@
       tableBody.innerHTML = '';
       data.rows.forEach(row => {
         const tr = document.createElement('tr');
-        row.forEach(cell => {
+        // به تعداد ستون‌ها سلول می‌سازیم
+        for (let i = 0; i < data.headers.length; i++) {
           const td = document.createElement('td');
-          td.textContent = cell;
+          td.textContent = (row && row[i] !== undefined) ? row[i] : '';
           tr.appendChild(td);
-        });
+        }
         tableBody.appendChild(tr);
       });
 
-      // پنهان کردن بارگذاری، نمایش جدول
       uploadArea.classList.remove('show');
       tableWrapper.classList.add('show');
 
-      // دکمه بارگذاری مجدد فقط در حالت محلی لازم است
-      if (!isServer) {
-        reloadBtn.classList.add('show');
-      }
+      if (!isServer) reloadBtn.classList.add('show');
     }
 
-    // ---------- کمک‌تابع‌ها ----------
     function setStatus(type, text) {
       statusBar.classList.remove('ok', 'err');
       if (type) statusBar.classList.add(type);
